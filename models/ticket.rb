@@ -20,4 +20,14 @@ class Ticket
     pg_result = SqlRunner.run(sql, values)
     @id = pg_result[0]["id"].to_i
   end
+
+  def Ticket.all
+    sql = "SELECT * FROM tickets"
+    pg_result = SqlRunner.run(sql)
+    return Ticket.map_create(pg_result)
+  end
+
+  def Ticket.map_create(hashes)
+    return hashes.map {|hash| Ticket.new(hash)}
+  end
 end

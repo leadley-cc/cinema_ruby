@@ -20,4 +20,14 @@ class Customer
     pg_result = SqlRunner.run(sql, values)
     @id = pg_result[0]["id"].to_i
   end
+
+  def Customer.all
+    sql = "SELECT * FROM customers"
+    pg_result = SqlRunner.run(sql)
+    return Customer.map_create(pg_result)
+  end
+
+  def Customer.map_create(hashes)
+    return hashes.map {|hash| Customer.new(hash)}
+  end
 end

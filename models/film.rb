@@ -20,4 +20,14 @@ class Film
     pg_result = SqlRunner.run(sql, values)
     @id = pg_result[0]["id"].to_i
   end
+
+  def Film.all
+    sql = "SELECT * FROM films"
+    pg_result = SqlRunner.run(sql)
+    return Film.map_create(pg_result)
+  end
+
+  def Film.map_create(hashes)
+    return hashes.map {|hash| Film.new(hash)}
+  end
 end
