@@ -21,6 +21,11 @@ class Film
     @id = pg_result[0]["id"].to_i
   end
 
+  def Film.delete_all
+    sql = "DELETE FROM films"
+    SqlRunner.run(sql)
+  end
+
   def Film.all
     sql = "SELECT * FROM films"
     pg_result = SqlRunner.run(sql)

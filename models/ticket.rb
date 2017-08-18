@@ -21,6 +21,11 @@ class Ticket
     @id = pg_result[0]["id"].to_i
   end
 
+  def Ticket.delete_all
+    sql = "DELETE FROM tickets"
+    SqlRunner.run(sql)
+  end
+
   def Ticket.all
     sql = "SELECT * FROM tickets"
     pg_result = SqlRunner.run(sql)
