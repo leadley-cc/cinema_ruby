@@ -17,8 +17,8 @@ class Ticket
       RETURNING id
     "
     values = [@customer_id, @film_id]
-    pg_result = SqlRunner.run(sql, values)
-    @id = pg_result[0]["id"].to_i
+    result = SqlRunner.run(sql, values)
+    @id = result[0]["id"].to_i
   end
 
   def update
@@ -43,8 +43,8 @@ class Ticket
 
   def Ticket.all
     sql = "SELECT * FROM tickets"
-    pg_result = SqlRunner.run(sql)
-    return Ticket.map_create(pg_result)
+    result = SqlRunner.run(sql)
+    return Ticket.map_create(result)
   end
 
   def Ticket.map_create(hashes)

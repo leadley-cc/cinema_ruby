@@ -10,6 +10,16 @@ class Film
     @price = options["price"].to_i
   end
 
+  def viewers
+    sql = "
+      SELECT customers.* FROM customers
+      INNER JOIN tickets ON customers.id = tickets.customer_id
+      WHERE tickets.film_id = $1
+    "
+    result = SqlRunner.run(sql, [@id])
+    return Customer.map_create(result)
+  end
+
   def save
     sql = "
       INSERT INTO films (title, price)
@@ -17,8 +27,8 @@ class Film
       RETURNING id
     "
     values = [@title, @price]
-    pg_result = SqlRunner.run(sql, values)
-    @id = pg_result[0]["id"].to_i
+    result = SqlRunner.run(sql, values)
+    @id = result[0]["id"].to_i
   end
 
   def update
@@ -43,8 +53,8 @@ class Film
 
   def Film.all
     sql = "SELECT * FROM films"
-    pg_result = SqlRunner.run(sql)
-    return Film.map_create(pg_result)
+    result = SqlRunner.run(sql)
+    return Film.map_create(result)
   end
 
   def Film.map_create(hashes)

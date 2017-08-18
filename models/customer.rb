@@ -10,6 +10,16 @@ class Customer
     @funds = options["funds"].to_i
   end
 
+  def films_watched
+    sql = "
+      SELECT films.* FROM films
+      INNER JOIN tickets ON films.id = tickets.film_id
+      WHERE tickets.customer_id = $1
+    "
+    result = SqlRunner.run(sql, [@id])
+    return Film.map_create(result)
+  end
+
   def save
     sql = "
       INSERT INTO customers (name, funds)
@@ -17,8 +27,8 @@ class Customer
       RETURNING id
     "
     values = [@name, @funds]
-    pg_result = SqlRunner.run(sql, values)
-    @id = pg_result[0]["id"].to_i
+    result = SqlRunner.run(sql, values)
+    @id = result[0]["id"].to_i
   end
 
   def update
@@ -43,8 +53,8 @@ class Customer
 
   def Customer.all
     sql = "SELECT * FROM customers"
-    pg_result = SqlRunner.run(sql)
-    return Customer.map_create(pg_result)
+    result = SqlRunner.run(sql)
+    return Customer.map_create(result)
   end
 
   def Customer.map_create(hashes)
