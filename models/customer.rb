@@ -21,6 +21,11 @@ class Customer
     @id = pg_result[0]["id"].to_i
   end
 
+  def delete
+    sql = "DELETE FROM customers WHERE id = $1"
+    SqlRunner.run(sql, [@id])
+  end
+
   def Customer.delete_all
     sql = "DELETE FROM customers"
     SqlRunner.run(sql)
