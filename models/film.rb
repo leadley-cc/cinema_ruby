@@ -22,10 +22,11 @@ class Film
     return Screening.new(result[0])
   end
 
-  def add_screening(date_time)
+  def add_screening(date_time, available_tickets)
     screening_hash = {
       "film_id" => @id,
-      "date_time" => date_time
+      "date_time" => date_time,
+      "available_tickets" => available_tickets
     }
     return Screening.new(screening_hash)
   end

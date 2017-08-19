@@ -14,6 +14,11 @@ customer1 = Customer.new({
   "funds" => 80
 })
 customer1.save
+customer2 = Customer.new({
+  "name" => "Moneybags",
+  "funds" => 1_000_000
+})
+customer2.save
 
 film1 = Film.new({
   "title" => "Wonder Woman",
@@ -21,9 +26,9 @@ film1 = Film.new({
 })
 film1.save
 
-screening1 = film1.add_screening("2017-08-19 15:00")
+screening1 = film1.add_screening("2017-08-19 15:00", 20)
 screening1.save
-screening2 = film1.add_screening("2017-08-19 18:00")
+screening2 = film1.add_screening("2017-08-19 18:00", 30)
 screening2.save
 
 ticket1 = customer1.buy_ticket(screening1)

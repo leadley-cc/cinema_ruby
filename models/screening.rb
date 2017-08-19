@@ -2,12 +2,13 @@ require_relative "../db/sql_runner"
 
 class Screening
   attr_reader :id
-  attr_accessor :film_id, :date_time
+  attr_accessor :film_id, :date_time, :available_tickets
 
   def initialize(options)
     @id = options["id"].to_i if options["id"]
     @film_id = options["film_id"].to_i
     @date_time = options["date_time"]
+    @available_tickets = options["available_tickets"].to_i
   end
 
   def film
@@ -18,11 +19,11 @@ class Screening
 
   def save
     sql = "
-      INSERT INTO screenings (film_id, date_time)
-      VALUES ($1, $2)
+      INSERT INTO screenings (film_id, date_time, available_tickets)
+      VALUES ($1, $2, $3)
       RETURNING id
     "
-    values = [@film_id, @date_time]
+    values = [@film_id, @date_time, @available_tickets]
     result = SqlRunner.run(sql, values)
     @id = result[0]["id"].to_i
   end
@@ -30,10 +31,10 @@ class Screening
   def update
     sql = "
       UPDATE tickets
-      SET (film_id, date_time) = ($1, $2)
+      SET (film_id, date_time, available_tickets) = ($1, $2, $3)
       WHERE id = $3
     "
-    values = [@film_id, @date_time, @id]
+    values = [@film_id, @date_time, @available_tickets, @id]
     SqlRunner.run(sql, values)
   end
 

@@ -18,7 +18,8 @@ CREATE TABLE films (
 CREATE TABLE screenings (
   id SERIAL PRIMARY KEY,
   film_id INT REFERENCES films(id) NOT NULL,
-  date_time TIMESTAMP NOT NULL
+  date_time TIMESTAMP NOT NULL,
+  available_tickets INT
 );
 
 CREATE TABLE tickets (
