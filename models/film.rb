@@ -10,6 +10,14 @@ class Film
     @price = options["price"].to_i
   end
 
+  def add_screening(date_time)
+    screening_hash = {
+      "film_id" => @id,
+      "date_time" => date_time
+    }
+    return Screening.new(screening_hash)
+  end
+
   def viewers
     sql = "
       SELECT customers.* FROM customers
