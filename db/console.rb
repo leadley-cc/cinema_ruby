@@ -1,9 +1,11 @@
 require "pry"
 require_relative "../models/customer"
 require_relative "../models/film"
+require_relative "../models/screening"
 require_relative "../models/ticket"
 
 Ticket.delete_all
+Screening.delete_all
 Film.delete_all
 Customer.delete_all
 
