@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS tickets;
+DROP TABLE IF EXISTS screenings;
 DROP TABLE IF EXISTS films;
 DROP TABLE IF EXISTS customers;
 
@@ -14,8 +15,15 @@ CREATE TABLE films (
   price INT
 );
 
+CREATE TABLE screenings (
+  id SERIAL PRIMARY KEY,
+  film_id INT REFERENCES films(id) NOT NULL,
+  timedate TIMESTAMP NOT NULL
+);
+
 CREATE TABLE tickets (
   id SERIAL PRIMARY KEY,
   customer_id INT REFERENCES customers(id) NOT NULL,
-  film_id INT REFERENCES films(id) NOT NULL
+  film_id INT REFERENCES films(id) NOT NULL,
+  screening_id INT REFERENCES screenings(id) NOT NULL
 );
