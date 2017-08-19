@@ -96,4 +96,10 @@ class Film
   def Film.map_create(hashes)
     return hashes.map {|hash| Film.new(hash)}
   end
+
+  def Film.find_by_title(title)
+    sql = "SELECT * FROM films WHERE LOWER(title) = $1"
+    result = SqlRunner.run(sql, [title.downcase])
+    return Film.new(result[0]) unless result.to_a.empty?
+  end
 end
