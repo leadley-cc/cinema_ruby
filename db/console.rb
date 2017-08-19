@@ -21,6 +21,12 @@ film1 = Film.new({
 })
 film1.save
 
+screening1 = Screening.new({
+  "film_id" => film1.id,
+  "timedate" => "2017-08-19 15:00"
+})
+screening1.save
+
 ticket1 = customer1.buy_ticket(film1)
 ticket1.save if ticket1
 
