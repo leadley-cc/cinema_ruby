@@ -20,6 +20,15 @@ class Film
     return Customer.map_create(result)
   end
 
+  def view_count
+    sql = "
+      SELECT COUNT(id) FROM tickets
+      WHERE film_id = $1
+    "
+    result = SqlRunner.run(sql, [@id])
+    return result[0]["count"].to_i
+  end
+
   def save
     sql = "
       INSERT INTO films (title, price)
