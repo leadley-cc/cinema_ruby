@@ -18,7 +18,7 @@ CREATE TABLE films (
 CREATE TABLE screenings (
   id SERIAL PRIMARY KEY,
   film_id INT REFERENCES films(id) NOT NULL,
-  timedate TIMESTAMP NOT NULL
+  date_time TIMESTAMP NOT NULL
 );
 
 CREATE TABLE tickets (
