@@ -10,6 +10,18 @@ class Film
     @price = options["price"].to_i
   end
 
+  def most_popular_screening
+    sql = "
+      SELECT screenings.*, COUNT(*) FROM tickets
+      INNER JOIN screenings ON screenings.id = tickets.screening_id
+      WHERE tickets.film_id = $1
+      GROUP BY screenings.id
+      ORDER BY COUNT(*) DESC
+    "
+    result = SqlRunner.run(sql, [@id])
+    return Screening.new(result[0])
+  end
+
   def add_screening(date_time)
     screening_hash = {
       "film_id" => @id,
