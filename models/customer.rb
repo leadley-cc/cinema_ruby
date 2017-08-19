@@ -10,13 +10,15 @@ class Customer
     @funds = options["funds"].to_i
   end
 
-  def buy_ticket(film)
+  def buy_ticket(screening)
+    film = screening.film
     return puts "Not enough funds!" if @funds < film.price
     @funds -= film.price
     update
     ticket_hash = {
       "customer_id" => @id,
-      "film_id" => film.id
+      "film_id" => screening.film_id,
+      "screening_id" => screening.id
     }
     return Ticket.new(ticket_hash)
   end
