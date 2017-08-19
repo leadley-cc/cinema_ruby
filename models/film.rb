@@ -18,6 +18,12 @@ class Film
     return Screening.new(screening_hash)
   end
 
+  def screenings
+    sql = "SELECT * FROM screenings WHERE film_id = $1"
+    result = SqlRunner.run(sql, [@id])
+    return Screening.map_create(result)
+  end
+
   def viewers
     sql = "
       SELECT customers.* FROM customers
