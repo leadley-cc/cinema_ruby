@@ -10,6 +10,18 @@ class Ticket
     @film_id = options["film_id"].to_i
   end
 
+  def customer
+    sql = "SELECT * FROM customers WHERE id = $1"
+    result = SqlRunner.run(sql, [@customer_id])
+    return Customer.new(result[0])
+  end
+
+  def film
+    sql = "SELECT * FROM films WHERE id = $1"
+    result = SqlRunner.run(sql, [@film_id])
+    return Film.new(result[0])
+  end
+
   def save
     sql = "
       INSERT INTO tickets (customer_id, film_id)
