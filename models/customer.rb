@@ -10,6 +10,17 @@ class Customer
     @funds = options["funds"].to_i
   end
 
+  def buy_ticket(film)
+    return puts "Not enough funds!" if @funds < film.price
+    @funds -= film.price
+    update
+    ticket_hash = {
+      "customer_id" => @id,
+      "film_id" => film.id
+    }
+    return Ticket.new(ticket_hash)
+  end
+
   def films_watched
     sql = "
       SELECT films.* FROM films

@@ -9,7 +9,7 @@ Customer.delete_all
 
 customer1 = Customer.new({
   "name" => "Michael Leadley",
-  "funds" => 80
+  "funds" => 0
 })
 customer1.save
 
@@ -19,11 +19,8 @@ film1 = Film.new({
 })
 film1.save
 
-ticket1 = Ticket.new({
-  "customer_id" => customer1.id,
-  "film_id" => film1.id
-})
-ticket1.save
+ticket1 = customer1.buy_ticket(film1)
+ticket1.save if ticket1
 
 binding.pry
 nil
