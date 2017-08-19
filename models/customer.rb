@@ -10,11 +10,17 @@ class Customer
     @funds = options["funds"].to_i
   end
 
+  def remove_funds(price)
+    return false if @funds < price
+    @funds -= price
+    update
+    return true
+  end
+
   def buy_ticket(screening)
     film = screening.film
-    return puts "Not enough funds!" if @funds < film.price
-    @funds -= film.price
-    update
+    return puts "No tickets left!" unless screening.remove_ticket
+    return puts "Not enough funds!" unless remove_funds(film.price)
     ticket_hash = {
       "customer_id" => @id,
       "film_id" => screening.film_id,

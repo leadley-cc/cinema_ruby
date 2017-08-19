@@ -11,6 +11,13 @@ class Screening
     @available_tickets = options["available_tickets"].to_i
   end
 
+  def remove_ticket
+    return false if @available_tickets <= 0
+    @available_tickets -= 1
+    update
+    return true
+  end
+
   def film
     sql = "SELECT * FROM films WHERE id = $1"
     result = SqlRunner.run(sql, [@film_id])
@@ -30,9 +37,9 @@ class Screening
 
   def update
     sql = "
-      UPDATE tickets
+      UPDATE screenings
       SET (film_id, date_time, available_tickets) = ($1, $2, $3)
-      WHERE id = $3
+      WHERE id = $4
     "
     values = [@film_id, @date_time, @available_tickets, @id]
     SqlRunner.run(sql, values)
