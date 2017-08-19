@@ -23,6 +23,12 @@ class Ticket
     return Film.new(result[0])
   end
 
+  def screening
+    sql = "SELECT * FROM screenings WHERE id = $1"
+    result = SqlRunner.run(sql, [@screening_id])
+    return Screening.new(result[0])
+  end
+
   def save
     sql = "
       INSERT INTO tickets (customer_id, film_id, screening_id)
