@@ -5,6 +5,7 @@ class Screening < CinemaModel
   @columns = ["film_id", "date_time", "available_tickets"]
 
   attr_accessor *@columns
+  fk_selector "Film"
 
   def initialize(options)
     set_instance_variables(options)
@@ -16,9 +17,5 @@ class Screening < CinemaModel
     @available_tickets = avail_int - 1
     update
     return true
-  end
-
-  def film
-    foreign_key_select_single("Film")
   end
 end

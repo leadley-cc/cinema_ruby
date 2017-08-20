@@ -1,3 +1,4 @@
+require_relative "fk_selector"
 require_relative "../db/sql_runner"
 
 class CinemaModel
