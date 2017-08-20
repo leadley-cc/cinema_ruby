@@ -2,8 +2,8 @@ require_relative "cinema_model"
 require_relative "../db/sql_runner"
 
 class Film < CinemaModel
-  @@table = "films"
-  @@columns = ["id", "title", "price"]
+  @table = "films"
+  @columns = ["id", "title", "price"]
 
   attr_reader :id
   attr_accessor :title, :price

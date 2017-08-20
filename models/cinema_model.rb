@@ -1,11 +1,12 @@
 require_relative "../db/sql_runner"
 
 class CinemaModel
-  @@table = ""
-  @@columns = []
+  class << self
+    attr_accessor :table, :columns
+  end
 
   def set_instance_variables(options)
-    @@columns.each do |column|
+    self.class.columns.each do |column|
       next if (column == "id") && @id
       puts "@#{column}: " + options[column].to_s
       instance_variable_set("@#{column}", options[column])
@@ -13,7 +14,7 @@ class CinemaModel
   end
 
   def sql_columns_str
-    @@columns.select{|col| col != "id"}.join(", ")
+    self.class.columns.select{|col| col != "id"}.join(", ")
   end
 
   def sql_placeholder_str(length)
@@ -25,7 +26,7 @@ class CinemaModel
 
   def sql_values_array(with_id = true)
     array = []
-    @@columns.each do |column|
+    self.class.columns.each do |column|
       array << send(column) unless column == "id"
     end
     array << @id if with_id
@@ -39,17 +40,18 @@ class CinemaModel
 
   def options_hash
     options_hash = Hash.new
-    @@columns.each do |column|
+    self.class.columns.each do |column|
       options_hash[column] = send(column)
     end
     return options_hash
   end
 
   def save
+    columns_no = self.class.columns.count
     sql = "
-      INSERT INTO #{@@table}
+      INSERT INTO #{self.class.table}
       (#{sql_columns_str})
-      VALUES (#{sql_placeholder_str(@@columns.count - 1)})
+      VALUES (#{sql_placeholder_str(columns_no - 1)})
       RETURNING id
     "
     values = sql_values_array(with_id = false)
@@ -58,9 +60,9 @@ class CinemaModel
   end
 
   def update
-    columns_no = @@columns.count
+    columns_no = self.class.columns.count
     puts sql = "
-      UPDATE #{@@table}
+      UPDATE #{self.class.table}
       SET (#{sql_columns_str})
       = (#{sql_placeholder_str(columns_no - 1)})
       WHERE id = $#{columns_no}
@@ -69,16 +71,16 @@ class CinemaModel
   end
 
   def delete
-    sql = "DELETE FROM #{@@table} WHERE id = $1"
+    sql = "DELETE FROM #{self.class.table} WHERE id = $1"
     SqlRunner.run(sql, [@id])
   end
 
   def self.delete_all
-    SqlRunner.run("DELETE FROM #{@@table}")
+    SqlRunner.run("DELETE FROM #{self.table}")
   end
 
   def self.all
-    result = SqlRunner.run("SELECT * FROM #{@@table}")
+    result = SqlRunner.run("SELECT * FROM #{self.table}")
     return self.map_create(result)
   end
 
