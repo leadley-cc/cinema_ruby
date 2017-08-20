@@ -1,5 +1,6 @@
-module CinemaModel
-  @@columns ||= []
+class CinemaModel
+  @@table = ""
+  @@columns = []
 
   def set_instance_variables(options)
     @@columns.each do |column|
@@ -20,5 +21,18 @@ module CinemaModel
       options_hash[column] = send("#{column}")
     end
     return options_hash
+  end
+
+  def self.delete_all
+    SqlRunner.run("DELETE FROM #{@@table}")
+  end
+
+  def self.all
+    result = SqlRunner.run("SELECT * FROM #{@@table}")
+    return self.map_create(result)
+  end
+
+  def self.map_create(hashes)
+    return hashes.map {|hash| self.new(hash)}
   end
 end

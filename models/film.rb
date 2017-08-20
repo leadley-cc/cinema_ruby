@@ -1,9 +1,9 @@
 require_relative "cinema_model"
 require_relative "../db/sql_runner"
 
-class Film
-  include CinemaModel
+class Film < CinemaModel
 
+  @@table = "films"
   @@columns = ["id", "title", "price"]
 
   attr_reader :id
@@ -11,12 +11,6 @@ class Film
 
   def initialize(options)
     set_instance_variables(options)
-  end
-
-  def options_hash
-    { "id" => @id,
-      "title" => @title,
-      "price" => @price }
   end
 
   def most_popular_screening
@@ -89,21 +83,6 @@ class Film
   def delete
     sql = "DELETE FROM films WHERE id = $1"
     SqlRunner.run(sql, [@id])
-  end
-
-  def Film.delete_all
-    sql = "DELETE FROM films"
-    SqlRunner.run(sql)
-  end
-
-  def Film.all
-    sql = "SELECT * FROM films"
-    result = SqlRunner.run(sql)
-    return Film.map_create(result)
-  end
-
-  def Film.map_create(hashes)
-    return hashes.map {|hash| Film.new(hash)}
   end
 
   def Film.find_by_title(title)
