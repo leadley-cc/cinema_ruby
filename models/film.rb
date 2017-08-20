@@ -11,15 +11,6 @@ class Film
 
   def initialize(options)
     set_instance_variables(options)
-    # @id = options["id"].to_i if options["id"]
-    # @title = options["title"]
-    # @price = options["price"].to_i
-  end
-
-  def update_with_hash(options)
-    @title = options["title"]
-    @price = options["price"].to_i
-    update
   end
 
   def options_hash
