@@ -2,10 +2,8 @@ require_relative "cinema_model"
 require_relative "../db/sql_runner"
 
 class Film < CinemaModel
-  @table = "films"
   @columns = ["title", "price"]
 
-  attr_reader :id
   attr_accessor *@columns
 
   def initialize(options)

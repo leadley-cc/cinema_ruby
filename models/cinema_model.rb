@@ -5,6 +5,14 @@ class CinemaModel
     attr_reader :table, :columns
   end
 
+  attr_reader :id
+
+  def self.inherited(subclass)
+    subclass.class_eval do
+      @table = subclass.name.downcase + "s"
+    end
+  end
+
   def set_instance_variables(options)
     self.class.columns.each do |column|
       instance_variable_set("@#{column}", options[column])
