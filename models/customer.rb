@@ -1,18 +1,19 @@
+require_relative "cinema_model"
 require_relative "../db/sql_runner"
 
-class Customer
-  attr_reader :id
-  attr_accessor :name, :funds
+class Customer < CinemaModel
+  @columns = ["name", "funds"]
+  
+  attr_accessor *@columns
 
   def initialize(options)
-    @id = options["id"].to_i if options["id"]
-    @name = options["name"]
-    @funds = options["funds"].to_i
+    set_instance_variables(options)
   end
 
   def remove_funds(price)
-    return false if @funds < price
-    @funds -= price
+    funds_int = @funds.to_i
+    return false if funds_int < price
+    @funds = funds_int - price
     update
     return true
   end
@@ -20,7 +21,7 @@ class Customer
   def buy_ticket(screening)
     film = screening.film
     return puts "No tickets left!" unless screening.remove_ticket
-    return puts "Not enough funds!" unless remove_funds(film.price)
+    return puts "Not enough funds!" unless remove_funds(film.price.to_i)
     ticket_hash = {
       "customer_id" => @id,
       "film_id" => screening.film_id,
@@ -46,46 +47,5 @@ class Customer
     "
     result = SqlRunner.run(sql, [@id])
     return result[0]["count"].to_i
-  end
-
-  def save
-    sql = "
-      INSERT INTO customers (name, funds)
-      VALUES ($1, $2)
-      RETURNING id
-    "
-    values = [@name, @funds]
-    result = SqlRunner.run(sql, values)
-    @id = result[0]["id"].to_i
-  end
-
-  def update
-    sql = "
-      UPDATE customers
-      SET (name, funds) = ($1, $2)
-      WHERE id = $3
-    "
-    values = [@name, @funds, @id]
-    SqlRunner.run(sql, values)
-  end
-
-  def delete
-    sql = "DELETE FROM customers WHERE id = $1"
-    SqlRunner.run(sql, [@id])
-  end
-
-  def Customer.delete_all
-    sql = "DELETE FROM customers"
-    SqlRunner.run(sql)
-  end
-
-  def Customer.all
-    sql = "SELECT * FROM customers"
-    result = SqlRunner.run(sql)
-    return Customer.map_create(result)
-  end
-
-  def Customer.map_create(hashes)
-    return hashes.map {|hash| Customer.new(hash)}
   end
 end
