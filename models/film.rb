@@ -6,7 +6,7 @@ class Film < CinemaModel
   @columns = ["title", "price"]
 
   attr_reader :id
-  attr_accessor :title, :price
+  attr_accessor *@columns
 
   def initialize(options)
     set_instance_variables(options)

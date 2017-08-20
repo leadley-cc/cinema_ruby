@@ -4,7 +4,7 @@ class CinemaModel
   class << self
     attr_reader :table, :columns
   end
-
+  
   def set_instance_variables(options)
     self.class.columns.each do |column|
       instance_variable_set("@#{column}", options[column])

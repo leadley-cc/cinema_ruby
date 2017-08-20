@@ -6,7 +6,7 @@ class Screening < CinemaModel
   @columns = ["film_id", "date_time", "available_tickets"]
 
   attr_reader :id
-  attr_accessor :film_id, :date_time, :available_tickets
+  attr_accessor *@columns
 
   def initialize(options)
     set_instance_variables(options)
