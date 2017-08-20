@@ -20,7 +20,7 @@ class Customer
   def buy_ticket(screening)
     film = screening.film
     return puts "No tickets left!" unless screening.remove_ticket
-    return puts "Not enough funds!" unless remove_funds(film.price)
+    return puts "Not enough funds!" unless remove_funds(film.price.to_i)
     ticket_hash = {
       "customer_id" => @id,
       "film_id" => screening.film_id,

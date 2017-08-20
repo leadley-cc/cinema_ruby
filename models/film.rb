@@ -1,13 +1,19 @@
+require_relative "cinema_model"
 require_relative "../db/sql_runner"
 
 class Film
+  include CinemaModel
+
+  @@columns = ["id", "title", "price"]
+
   attr_reader :id
   attr_accessor :title, :price
 
   def initialize(options)
-    @id = options["id"].to_i if options["id"]
-    @title = options["title"]
-    @price = options["price"].to_i
+    set_instance_variables(options)
+    # @id = options["id"].to_i if options["id"]
+    # @title = options["title"]
+    # @price = options["price"].to_i
   end
 
   def update_with_hash(options)
