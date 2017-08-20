@@ -3,7 +3,7 @@ require_relative "../db/sql_runner"
 
 class Customer < CinemaModel
   @table = "customers"
-  @columns = ["id", "name", "funds"]
+  @columns = ["name", "funds"]
 
   attr_reader :id
   attr_accessor :name, :funds

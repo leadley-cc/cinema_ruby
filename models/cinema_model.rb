@@ -7,13 +7,13 @@ class CinemaModel
 
   def set_instance_variables(options)
     self.class.columns.each do |column|
-      next if (column == "id") && @id
       instance_variable_set("@#{column}", options[column])
     end
+    instance_variable_set("@id", options["id"]) unless @id
   end
 
   def sql_columns_str
-    self.class.columns.select{|col| col != "id"}.join(", ")
+    self.class.columns.join(", ")
   end
 
   def sql_placeholder_str(length)
@@ -26,7 +26,7 @@ class CinemaModel
   def sql_values_array(with_id = true)
     array = []
     self.class.columns.each do |column|
-      array << send(column) unless column == "id"
+      array << send(column)
     end
     array << @id if with_id
     return array
@@ -38,7 +38,7 @@ class CinemaModel
   end
 
   def options_hash
-    options_hash = Hash.new
+    options_hash = {"id" => @id}
     self.class.columns.each do |column|
       options_hash[column] = send(column)
     end
@@ -50,12 +50,12 @@ class CinemaModel
     sql = "
       INSERT INTO #{self.class.table}
       (#{sql_columns_str})
-      VALUES (#{sql_placeholder_str(columns_no - 1)})
+      VALUES (#{sql_placeholder_str(columns_no)})
       RETURNING id
     "
     values = sql_values_array(with_id = false)
     result = SqlRunner.run(sql, values)
-    @id = result[0]["id"].to_i
+    @id = result[0]["id"]
   end
 
   def update
@@ -63,8 +63,8 @@ class CinemaModel
     sql = "
       UPDATE #{self.class.table}
       SET (#{sql_columns_str})
-      = (#{sql_placeholder_str(columns_no - 1)})
-      WHERE id = $#{columns_no}
+      = (#{sql_placeholder_str(columns_no)})
+      WHERE id = $#{columns_no + 1}
     "
     SqlRunner.run(sql, sql_values_array)
   end
