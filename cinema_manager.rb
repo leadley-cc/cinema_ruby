@@ -1,13 +1,25 @@
+require "readline"
 require_relative "models/customer"
 require_relative "models/film"
 require_relative "models/screening"
 require_relative "models/ticket"
 
-def get_options_hash(param_names)
-  param_names.each_with_object({}) do |param_name, options_hash|
-    print param_name.capitalize + ": "
-    options_hash[param_name] = gets.chomp
+def readline_editable(prompt, editable)
+  Readline.pre_input_hook = -> {
+    Readline.insert_text(editable)
+    Readline.redisplay
+  }
+  Readline.readline(prompt)
+end
+
+def get_options_hash(param_names, options_hash = {})
+  param_names.each do |param_name|
+    options_hash[param_name] = readline_editable(
+      param_name.capitalize + ": ",
+      options_hash[param_name].to_s || ""
+    )
   end
+  return options_hash
 end
 
 def main_loop
@@ -18,6 +30,7 @@ def main_loop
     # TODO: list films, view film details, view film screenings
     # TODO: buy ticket, check/add funds, add screening
     # TODO: remove customer, cancel ticket, remove screening
+    # TODO: update/edit customer, film, screening, ticket
 
   when "exit", "quit", "bye"
     puts "Goodbye!"
@@ -30,6 +43,17 @@ def main_loop
     options_hash = get_options_hash(["title", "price"])
     Film.new(options_hash).save
     puts "Film added!"
+  when "update film", "edit film"
+    print "Title: "
+    film = Film.find_by_title(gets.chomp)
+    if film
+      puts "Please enter new details:"
+      new_options = get_options_hash(["title", "price"], film.options_hash)
+      film.update_with_hash(new_options)
+      puts "Film updated!"
+    else
+      puts "No such film found!"
+    end
   when "remove film", "delete film"
     print "Title: "
     film = Film.find_by_title(gets.chomp)

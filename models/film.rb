@@ -10,6 +10,18 @@ class Film
     @price = options["price"].to_i
   end
 
+  def update_with_hash(options)
+    @title = options["title"]
+    @price = options["price"].to_i
+    update
+  end
+
+  def options_hash
+    { "id" => @id,
+      "title" => @title,
+      "price" => @price }
+  end
+
   def most_popular_screening
     sql = "
       SELECT screenings.*, COUNT(*) FROM tickets
