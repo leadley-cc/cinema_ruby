@@ -26,7 +26,6 @@ def main_loop
   input = gets.chomp.downcase
   case input
 
-    # TODO: help
     # TODO: list films, view film details, view film screenings
     # TODO: buy ticket, check/add funds, add screening
     # TODO: remove customer, cancel ticket, remove screening
@@ -35,6 +34,9 @@ def main_loop
   when "exit", "quit", "bye"
     puts "Goodbye!"
     exit
+  when "help"
+    puts "Possible commands: " +
+      "exit, help, add customer, add film, edit film, delete film"
   when "add customer", "new customer"
     options_hash = get_options_hash(["name", "funds"])
     Customer.new(options_hash).save
