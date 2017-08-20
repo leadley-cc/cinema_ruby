@@ -2,13 +2,12 @@ require_relative "../db/sql_runner"
 
 class CinemaModel
   class << self
-    attr_accessor :table, :columns
+    attr_reader :table, :columns
   end
 
   def set_instance_variables(options)
     self.class.columns.each do |column|
       next if (column == "id") && @id
-      puts "@#{column}: " + options[column].to_s
       instance_variable_set("@#{column}", options[column])
     end
   end
@@ -61,7 +60,7 @@ class CinemaModel
 
   def update
     columns_no = self.class.columns.count
-    puts sql = "
+    sql = "
       UPDATE #{self.class.table}
       SET (#{sql_columns_str})
       = (#{sql_placeholder_str(columns_no - 1)})
