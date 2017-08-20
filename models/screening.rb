@@ -21,8 +21,6 @@ class Screening < CinemaModel
   end
 
   def film
-    sql = "SELECT * FROM films WHERE id = $1"
-    result = SqlRunner.run(sql, [@film_id])
-    return Film.new(result[0])
+    foreign_key_select_single("Film")
   end
 end

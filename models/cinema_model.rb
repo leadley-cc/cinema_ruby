@@ -4,7 +4,7 @@ class CinemaModel
   class << self
     attr_reader :table, :columns
   end
-  
+
   def set_instance_variables(options)
     self.class.columns.each do |column|
       instance_variable_set("@#{column}", options[column])
@@ -72,6 +72,16 @@ class CinemaModel
   def delete
     sql = "DELETE FROM #{self.class.table} WHERE id = $1"
     SqlRunner.run(sql, [@id])
+  end
+
+  def foreign_key_select_single(model_name)
+    foreign_label = model_name.downcase
+    foreign_id = send("#{foreign_label}_id")
+    foreign_model = Object.const_get(model_name)
+
+    sql = "SELECT * FROM #{foreign_label}s WHERE id = $1"
+    result = SqlRunner.run(sql, [foreign_id])
+    return foreign_model.new(result[0])
   end
 
   def self.delete_all
