@@ -36,7 +36,12 @@ def main_loop
     exit
   when "help"
     puts "Possible commands: " +
-      "exit, help, add customer, add film, edit film, delete film"
+      "exit, help, " +
+      "list films, add film, edit film, delete film, " +
+      "add customer"
+  when "list films", "view films"
+    puts "Here are the currently available films:"
+    Film.all.each { |film| puts film.title }
   when "add customer", "new customer"
     options_hash = get_options_hash(["name", "funds"])
     Customer.new(options_hash).save
