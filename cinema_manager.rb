@@ -33,14 +33,17 @@ def main_loop
   when "exit", "quit", "bye"
     puts "Goodbye!"
     exit
+
   when "help"
     puts "Possible commands: " +
       "exit, help, " +
-      "list films, add film, edit film, delete film, " +
-      "add customer"
+      "list films, film details, new film, edit film, delete film, " +
+      "new customer, new screening"
+
   when "list films", "view films"
     puts "Here are the currently available films:"
     Film.all.each { |film| puts film.title }
+
   when "film details", "film screenings"
     print "Title: "
     film = Film.find_by_title(gets.chomp)
@@ -54,15 +57,13 @@ def main_loop
     else
       puts "No such film found!"
     end
-  when "add customer", "new customer"
-    options_hash = get_options_hash(["name", "funds"])
-    Customer.new(options_hash).save
-    puts "Customer added!"
-  when "add film", "new film"
+
+  when "new film", "add film"
     options_hash = get_options_hash(["title", "price"])
     Film.new(options_hash).save
     puts "Film added!"
-  when "update film", "edit film"
+
+  when "edit film", "update film"
     print "Title: "
     film = Film.find_by_title(gets.chomp)
     if film
@@ -73,7 +74,8 @@ def main_loop
     else
       puts "No such film found!"
     end
-  when "remove film", "delete film"
+
+  when "delete film", "remove film"
     print "Title: "
     film = Film.find_by_title(gets.chomp)
     if film
@@ -82,7 +84,13 @@ def main_loop
     else
       puts "No such film found!"
     end
-  when "add screening", "new screening"
+
+  when "new customer", "add customer"
+    options_hash = get_options_hash(["name", "funds"])
+    Customer.new(options_hash).save
+    puts "Customer added!"
+
+  when "new screening", "add screening"
     print "Film title: "
     film = Film.find_by_title(gets.chomp)
     if film
@@ -95,9 +103,11 @@ def main_loop
     else
       puts "No such film found!"
     end
+
   else
     puts "I'm sorry Dave, I'm afraid I can't do that."
   end
+
   puts "Would you like to do anything else?"
 end
 
