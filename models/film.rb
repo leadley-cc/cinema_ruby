@@ -2,9 +2,7 @@ require_relative "cinema_model"
 require_relative "../db/sql_runner"
 
 class Film < CinemaModel
-  @columns = ["title", "price"]
-
-  attr_accessor *@columns
+  column "title", "price"
 
   def initialize(options)
     set_instance_variables(options)
