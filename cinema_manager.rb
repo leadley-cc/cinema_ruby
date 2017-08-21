@@ -26,9 +26,9 @@ def main_loop
   input = gets.chomp.downcase
   case input
 
-    # TODO: buy ticket, check/add funds, add screening
+    # TODO: buy ticket, check/add funds
     # TODO: remove customer, cancel ticket, remove screening
-    # TODO: update/edit customer, film, screening, ticket
+    # TODO: update/edit customer, screening, ticket
 
   when "exit", "quit", "bye"
     puts "Goodbye!"
@@ -79,6 +79,19 @@ def main_loop
     if film
       film.delete
       puts "Film deleted!"
+    else
+      puts "No such film found!"
+    end
+  when "add screening", "new screening"
+    print "Film title: "
+    film = Film.find_by_title(gets.chomp)
+    if film
+      print "Date and time: "
+      date_time = gets.chomp
+      print "How many tickets are available?: "
+      tickets = gets.chomp
+      film.add_screening(date_time, tickets).save
+      puts "Screening added!"
     else
       puts "No such film found!"
     end
