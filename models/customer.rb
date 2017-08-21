@@ -3,7 +3,7 @@ require_relative "../db/sql_runner"
 
 class Customer < CinemaModel
   @columns = ["name", "funds"]
-  
+
   attr_accessor *@columns
 
   def initialize(options)
@@ -24,7 +24,6 @@ class Customer < CinemaModel
     return puts "Not enough funds!" unless remove_funds(film.price.to_i)
     ticket_hash = {
       "customer_id" => @id,
-      "film_id" => screening.film_id,
       "screening_id" => screening.id
     }
     return Ticket.new(ticket_hash)
@@ -32,8 +31,9 @@ class Customer < CinemaModel
 
   def films_watched
     sql = "
-      SELECT films.* FROM films
-      INNER JOIN tickets ON films.id = tickets.film_id
+      SELECT DISTINCT films.* FROM films
+      INNER JOIN screenings ON films.id = screenings.film_id
+      INNER JOIN tickets ON screenings.id = tickets.screening_id
       WHERE tickets.customer_id = $1
     "
     result = SqlRunner.run(sql, [@id])

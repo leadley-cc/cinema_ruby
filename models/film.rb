@@ -14,7 +14,7 @@ class Film < CinemaModel
     sql = "
       SELECT screenings.*, COUNT(*) FROM tickets
       INNER JOIN screenings ON screenings.id = tickets.screening_id
-      WHERE tickets.film_id = $1
+      WHERE screenings.film_id = $1
       GROUP BY screenings.id
       ORDER BY COUNT(*) DESC
     "
@@ -39,9 +39,10 @@ class Film < CinemaModel
 
   def viewers
     sql = "
-      SELECT customers.* FROM customers
+      SELECT DISTINCT customers.* FROM customers
       INNER JOIN tickets ON customers.id = tickets.customer_id
-      WHERE tickets.film_id = $1
+      INNER JOIN screenings ON tickets.screening_id = screenings.id
+      WHERE screenings.film_id = $1
     "
     result = SqlRunner.run(sql, [@id])
     return Customer.map_create(result)
@@ -49,8 +50,9 @@ class Film < CinemaModel
 
   def view_count
     sql = "
-      SELECT COUNT(id) FROM tickets
-      WHERE film_id = $1
+      SELECT COUNT(*) FROM tickets
+      INNER JOIN screenings ON tickets.screening_id = screenings.id
+      WHERE screenings.film_id = $1
     "
     result = SqlRunner.run(sql, [@id])
     return result[0]["count"].to_i
