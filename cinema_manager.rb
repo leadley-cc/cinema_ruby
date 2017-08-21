@@ -26,7 +26,6 @@ def main_loop
   input = gets.chomp.downcase
   case input
 
-    # TODO: list films, view film details, view film screenings
     # TODO: buy ticket, check/add funds, add screening
     # TODO: remove customer, cancel ticket, remove screening
     # TODO: update/edit customer, film, screening, ticket
@@ -42,6 +41,19 @@ def main_loop
   when "list films", "view films"
     puts "Here are the currently available films:"
     Film.all.each { |film| puts film.title }
+  when "film details", "film screenings"
+    print "Title: "
+    film = Film.find_by_title(gets.chomp)
+    if film
+      puts "Ticket price: £#{film.price}"
+      puts "Here are the screening times for #{film.title}: "
+      film.screenings.each do |screening|
+        puts "#{screening.date_time}" +
+          " (#{screening.available_tickets} tickets available)"
+      end
+    else
+      puts "No such film found!"
+    end
   when "add customer", "new customer"
     options_hash = get_options_hash(["name", "funds"])
     Customer.new(options_hash).save
