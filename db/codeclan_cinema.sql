@@ -25,6 +25,5 @@ CREATE TABLE screenings (
 CREATE TABLE tickets (
   id SERIAL PRIMARY KEY,
   customer_id INT REFERENCES customers(id) NOT NULL,
-  film_id INT REFERENCES films(id) NOT NULL,
   screening_id INT REFERENCES screenings(id) NOT NULL
 );

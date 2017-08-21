@@ -6,11 +6,10 @@ class CinemaModel
     attr_reader :table, :columns
   end
 
-  attr_reader :id
-
   def self.inherited(subclass)
     subclass.class_eval do
       @table = subclass.name.downcase + "s"
+      attr_reader :id
     end
   end
 
@@ -26,7 +25,6 @@ class CinemaModel
   end
 
   def sql_placeholder_str(length)
-    return "" if length < 1
     str = "$1"
     (2..length).each {|x| str << ", $#{x}"}
     return str
