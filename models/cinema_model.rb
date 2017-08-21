@@ -1,14 +1,14 @@
-require_relative "fk_selector"
+require_relative "class_methods"
 require_relative "../db/sql_runner"
 
 class CinemaModel
-  class << self
-    attr_reader :table, :columns
-  end
-
   def self.inherited(subclass)
     subclass.class_eval do
       @table = subclass.name.downcase + "s"
+      @columns = []
+      class << self
+        attr_reader :table, :columns
+      end
       attr_reader :id
     end
   end

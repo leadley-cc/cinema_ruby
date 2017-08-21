@@ -2,10 +2,8 @@ require_relative "cinema_model"
 require_relative "../db/sql_runner"
 
 class Screening < CinemaModel
-  @columns = ["film_id", "date_time", "available_tickets"]
-
-  attr_accessor *@columns
-  fk_selector "Film"
+  foreign_key "Film"
+  column "date_time", "available_tickets"
 
   def initialize(options)
     set_instance_variables(options)
